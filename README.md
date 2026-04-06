@@ -31,12 +31,28 @@ Curfew/
 
 ## 🚀 快速开始
 
-### 1. 首次配置
+### 1. 创建虚拟环境
+
+在项目目录中创建名为 .venv 的虚拟环境：
+
+```bash
+# Linux/macOS
+python3 -m venv .venv
+
+# Windows
+python -m venv .venv
+```
+
+### 2. 首次配置
 
 运行配置向导，按照提示完成设置：
 
 ```bash
-python3 welcome.py
+# Linux/macOS
+.venv/bin/python3 welcome.py
+
+# Windows
+.venv\Scripts\python welcome.py
 ```
 
 配置过程中，您需要：
@@ -44,12 +60,16 @@ python3 welcome.py
 - 设置禁用时段（24小时制）
 - 设置检测间隔（分钟）
 
-### 2. 运行主程序
+### 3. 运行主程序
 
 配置完成后，主程序会在开机时自动运行。您也可以手动启动：
 
 ```bash
-python3 curfew.py
+# Linux/macOS
+.venv/bin/python3 curfew.py
+
+# Windows
+.venv\Scripts\python curfew.py
 ```
 
 程序会按照设置的检测间隔，持续检查当前时间是否在禁用时段内。

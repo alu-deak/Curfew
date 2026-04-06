@@ -45,12 +45,7 @@ def main():
     # 循环结束后执行关机
     print("准备执行关机命令")
     # 根据 debug 配置决定是否在调试模式下运行
-    if debug:
-        print("调试模式，执行关机命令（模拟）")
-        shutdown(config['shutdown_command'], test_mode=True)
-    else:
-        print("执行关机命令")
-        shutdown(config['shutdown_command'])
+    shutdown(config['shutdown_command'])
     
     print("Curfew 退出")
 

@@ -17,12 +17,14 @@ def setup_task_scheduler(script_path):
         try:
             # 创建 Windows 计划任务
             task_name = "Curfew"
+            # 构建虚拟环境激活脚本路径
+            venv_activate = os.path.join(os.path.dirname(script_path), '.venv', 'Scripts', 'activate.bat')
             # 使用 schtasks 命令创建计划任务
             # /sc onstart 表示开机启动
             # /tn 任务名称
             # /tr 要执行的命令
             # /ru SYSTEM 以系统权限运行
-            command = f"schtasks /create /sc onstart /tn {task_name} /tr \"{sys.executable} {script_path}\" /ru SYSTEM"
+            command = f"schtasks /create /sc onstart /tn {task_name} /tr \"cmd /c {venv_activate} && python {script_path}\" /ru SYSTEM"
             subprocess.run(command, shell=True, check=True)
             print("Windows 计划任务已设置")
         except Exception as e:
@@ -36,6 +38,9 @@ def setup_systemd(script_path):
         print("需要root权限来创建systemd服务文件")
         return
     
+    # 构建虚拟环境路径
+    venv_path = os.path.join(os.path.dirname(script_path), '.venv')
+    activate_script = os.path.join(venv_path, 'bin', 'activate')
     service_file = '/etc/systemd/system/curfew.service'
     service_content = f"""
 [Unit]
@@ -45,7 +50,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
-ExecStart={sys.executable} {script_path}
+ExecStart=/bin/bash -c 'source {activate_script} && python3 {script_path}'
 Restart=no
 
 [Install]

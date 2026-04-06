@@ -1,3 +1,4 @@
 config.json
 curfew.log
 __pycache__/
+.trae/
