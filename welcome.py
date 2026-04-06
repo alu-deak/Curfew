@@ -23,7 +23,7 @@ def main():
         elif mode_choice == '2':
             # Linux 系统模式
             autostart_type = 'systemd'
-            shutdown_command = ['sudo', 'shutdown', 'now']
+            shutdown_command = ['shutdown', 'now']
         else:
             # 自定义模式
             print("\n请选择自启动形式:")

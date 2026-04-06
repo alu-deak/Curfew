@@ -31,6 +31,11 @@ def setup_task_scheduler(script_path):
         print("Windows 计划任务仅在 Windows 系统上可用")
 
 def setup_systemd(script_path):
+    # 检查是否具有 root 权限
+    if os.geteuid() != 0:
+        print("需要root权限来创建systemd服务文件")
+        return
+    
     service_file = '/etc/systemd/system/curfew.service'
     service_content = f"""
 [Unit]
@@ -39,6 +44,7 @@ After=network.target
 
 [Service]
 Type=simple
+User=root
 ExecStart={sys.executable} {script_path}
 Restart=no
 
