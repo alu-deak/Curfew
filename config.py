@@ -8,7 +8,7 @@ def load_config():
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, 'r') as f:
             return json.load(f)
-    return None
+    raise FileNotFoundError("配置文件不存在，请先运行 welcome.py 进行配置")
 
 def save_config(config):
     os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
