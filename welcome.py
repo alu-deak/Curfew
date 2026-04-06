@@ -5,7 +5,10 @@ import os
 import sys
 
 def main():
-    config = load_config()
+    try:
+        config = load_config()
+    except FileNotFoundError:
+        config = None
     
     if not config:
         print("首次启动，开始配置")
@@ -49,10 +52,24 @@ def main():
                 shutdown_command = custom_shutdown
         
         print("\n请设置禁用时段 (24小时制):")
-        start_hour = int(input("开始小时 (0-23): "))
-        start_minute = int(input("开始分钟 (0-59): "))
-        end_hour = int(input("结束小时 (0-23): "))
-        end_minute = int(input("结束分钟 (0-59): "))
+        restricted_hours_list = []
+        
+        while True:
+            start_hour = int(input("开始小时 (0-23): "))
+            start_minute = int(input("开始分钟 (0-59): "))
+            end_hour = int(input("结束小时 (0-23): "))
+            end_minute = int(input("结束分钟 (0-59): "))
+            
+            restricted_hours_list.append({
+                'start_hour': start_hour,
+                'start_minute': start_minute,
+                'end_hour': end_hour,
+                'end_minute': end_minute
+            })
+            
+            add_more = input("是否添加更多时间段？(y/n): ")
+            if add_more.lower() != 'y':
+                break
         
         print("\n请设置检测间隔 (分钟):")
         check_interval = int(input("检测间隔 (1-20): "))
@@ -60,12 +77,7 @@ def main():
         config = {
             'autostart_type': autostart_type,
             'shutdown_command': shutdown_command,
-            'restricted_hours': {
-                'start_hour': start_hour,
-                'start_minute': start_minute,
-                'end_hour': end_hour,
-                'end_minute': end_minute
-            },
+            'restricted_hours': restricted_hours_list,
             'check_interval': check_interval,
             'debug': False
         }
