@@ -50,6 +50,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
+Environment=CURFEW_CONFIG={os.path.join(os.path.dirname(script_path), 'config.json')}
 ExecStart=/bin/bash -c 'source {activate_script} && python3 {script_path}'
 Restart=no
 
@@ -60,8 +61,8 @@ WantedBy=multi-user.target
     try:
         with open(service_file, 'w') as f:
             f.write(service_content)
-        subprocess.run(['sudo', 'systemctl', 'daemon-reload'], check=True)
-        subprocess.run(['sudo', 'systemctl', 'enable', 'curfew.service'], check=True)
+        subprocess.run(['systemctl', 'daemon-reload'], check=True)
+        subprocess.run(['systemctl', 'enable', 'curfew.service'], check=True)
         print("systemd 服务已设置")
     except Exception as e:
         print(f"设置 systemd 服务失败: {e}")

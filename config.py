@@ -2,7 +2,8 @@
 import os
 import json
 
-CONFIG_FILE = os.path.join(os.getcwd(), 'config.json')
+# 从环境变量中读取配置文件位置，默认使用当前目录
+CONFIG_FILE = os.environ.get('CURFEW_CONFIG', os.path.join(os.getcwd(), 'config.json'))
 
 def load_config():
     if os.path.exists(CONFIG_FILE):
