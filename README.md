@@ -30,6 +30,20 @@ python3 -m venv .venv
 python -m venv .venv
 ```
 
+### 2. 安装依赖
+
+激活虚拟环境并安装项目所需的依赖：
+
+```bash
+# Linux/macOS
+source .venv/bin/activate
+pip install python-daemon
+
+# Windows
+.venv\Scripts\activate.bat
+pip install python-daemon
+```
+
 ### 2. 首次配置
 
 激活虚拟环境并运行配置向导，按照提示完成设置（需要管理员权限）：
@@ -50,7 +64,7 @@ python main.py
 - 设置禁用时段（24小时制）
 - 设置检测间隔（分钟）
 
-### 3. 运行主程序
+### 4. 运行主程序
 
 配置完成后，主程序会在开机时自动运行。您也可以手动启动：
 
