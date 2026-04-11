@@ -6,20 +6,34 @@ import sys
 import subprocess
 
 def setup_config():
+    # 系统模式选择
     print("请选择系统模式:")
     print("1. Windows 系统模式")
     print("2. Linux 系统模式")
     print("3. 自定义模式")
     mode_choice = input("请输入选项编号: ")
     
+    # 操作类型选择
+    print("\n请选择操作类型:")
+    print("1. 关机")
+    print("2. 睡眠")
+    action_choice = input("请输入选项编号: ")
+    
+    # 根据选择设置配置
     if mode_choice == '1':
         # Windows 系统模式
         autostart_type = 'task scheduler'
-        shutdown_command = 'shutdown /s /t 0'
+        if action_choice == '1':
+            shutdown_command = 'shutdown /s /t 0'
+        else:
+            shutdown_command = 'rundll32.exe powrprof.dll,SetSuspendState 0,1,0'
     elif mode_choice == '2':
         # Linux 系统模式
         autostart_type = 'systemd'
-        shutdown_command = ['shutdown', 'now']
+        if action_choice == '1':
+            shutdown_command = ['shutdown', 'now']
+        else:
+            shutdown_command = ['systemctl', 'suspend']
     else:
         # 自定义模式
         print("\n请选择自启动形式:")
@@ -35,14 +49,19 @@ def setup_config():
         }
         autostart_type = autostart_map.get(autostart_choice, 'manual')
         
-        print("\n请输入自定义关机命令:")
-        print("例如: shutdown /s /t 0 或 sudo shutdown now")
-        custom_shutdown = input("请输入关机命令: ")
-        # 检查是否需要以列表形式存储
-        if ' ' in custom_shutdown:
-            shutdown_command = custom_shutdown.split()
+        if action_choice == '1':
+            print("\n请输入自定义关机命令:")
+            print("例如: shutdown /s /t 0 或 sudo shutdown now")
         else:
-            shutdown_command = custom_shutdown
+            print("\n请输入自定义睡眠命令:")
+            print("例如: rundll32.exe powrprof.dll,SetSuspendState 0,1,0 或 systemctl suspend")
+        
+        custom_command = input("请输入命令: ")
+        # 检查是否需要以列表形式存储
+        if ' ' in custom_command:
+            shutdown_command = custom_command.split()
+        else:
+            shutdown_command = custom_command
     
     print("\n请设置检测间隔 (分钟):")
     check_interval = int(input("检测间隔 (1-20): "))
