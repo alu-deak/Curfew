@@ -18,6 +18,10 @@ def setup_config():
     print("1. 关机")
     print("2. 睡眠")
     action_choice = input("请输入选项编号: ")
+    # 验证输入有效性
+    if action_choice not in ['1', '2']:
+        print("无效选项，请重新运行程序")
+        return
     
     # 根据选择设置配置
     if mode_choice == '1':
