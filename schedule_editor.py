@@ -55,7 +55,7 @@ def main():
     try:
         config = load_config()
     except FileNotFoundError:
-        print("配置文件不存在，请先运行 welcome.py 进行初始化")
+        print("配置文件不存在，请先运行 main.py 进行初始化")
         return
     
     # 获取并标准化时间段列表

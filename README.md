@@ -37,12 +37,12 @@ python -m venv .venv
 ```bash
 # Linux/macOS
 source .venv/bin/activate
-sudo python3 welcome.py
+sudo python3 main.py
 
 # Windows
 .venv\Scripts\activate.bat
 # 以管理员身份运行命令提示符，然后执行：
-python welcome.py
+python main.py
 ```
 
 配置过程中，您需要：
@@ -68,7 +68,7 @@ python curfew.py
 
 ## ⚙️ 配置说明
 
-配置文件 `config.json` 会在首次运行 `welcome.py` 后自动生成，包含以下设置：
+配置文件 `config.json` 会在首次运行 `main.py` 后自动生成，包含以下设置：
 
 ```json
 {
@@ -101,5 +101,5 @@ python curfew.py
 
 - **跨天设置**：支持跨天的禁用时段，如晚上 11 点到早上 7 点
 - **权限要求**：设置 systemd 服务需要 root 权限
-- **重新配置**：如需修改配置，删除 `config.json` 文件后再次运行 `welcome.py`
+- **重新配置**：如需修改配置，删除 `config.json` 文件后再次运行 `main.py`
 - **测试建议**：首次使用时，建议将 `debug` 设置为 `true` 进行测试
