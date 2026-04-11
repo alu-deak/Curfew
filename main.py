@@ -1,23 +1,54 @@
 #!/usr/bin/env python3
 from config import load_config, save_config
 from autostart import setup_autostart
+from consolemenu import ConsoleMenu
 import os
 import sys
 import subprocess
 
 def setup_config():
     # 系统模式选择
-    print("请选择系统模式:")
-    print("1. Windows 系统模式")
-    print("2. Linux 系统模式")
-    print("3. 自定义模式")
-    mode_choice = input("请输入选项编号: ")
+    # 由于consolemenu库版本问题，需要在函数内部导入SelectionMenu
+    # 这里使用try-except来处理可能的导入错误
+    try:
+        from consolemenu.selection_menu import SelectionMenu
+    except ImportError:
+        # 如果导入失败，使用简单的命令行输入来替代
+        def SelectionMenu(options, title, subtitle):
+            class MockSelectionMenu:
+                def __init__(self, options, title, subtitle):
+                    self.options = options
+                    self.title = title
+                    self.subtitle = subtitle
+                    self.selected_option = -1
+                
+                def show(self):
+                    print(f"\n{self.title}")
+                    if self.subtitle:
+                        print(self.subtitle)
+                    for i, option in enumerate(self.options, 1):
+                        print(f"{i}. {option}")
+                    while True:
+                        try:
+                            choice = int(input("请选择: ")) - 1
+                            if 0 <= choice < len(self.options):
+                                self.selected_option = choice
+                                break
+                            else:
+                                print("无效选项，请重新选择")
+                        except ValueError:
+                            print("无效输入，请输入数字")
+            return MockSelectionMenu(options, title, subtitle)
+    mode_options = ["Windows 系统模式", "Linux 系统模式", "自定义模式"]
+    mode_menu = SelectionMenu(mode_options, title="请选择系统模式", subtitle="")
+    mode_menu.show()
+    mode_choice = str(mode_menu.selected_option + 1)
     
     # 操作类型选择
-    print("\n请选择操作类型:")
-    print("1. 关机")
-    print("2. 睡眠")
-    action_choice = input("请输入选项编号: ")
+    action_options = ["关机", "睡眠"]
+    action_menu = SelectionMenu(action_options, title="请选择操作类型", subtitle="")
+    action_menu.show()
+    action_choice = str(action_menu.selected_option + 1)
     # 验证输入有效性
     if action_choice not in ['1', '2']:
         print("无效选项，请重新运行程序")
@@ -40,11 +71,10 @@ def setup_config():
             shutdown_command = ['systemctl', 'suspend']
     else:
         # 自定义模式
-        print("\n请选择自启动形式:")
-        print("1. Windows 计划任务")
-        print("2. systemd 服务 (Linux)")
-        print("3. 稍后自行设置")
-        autostart_choice = input("请输入选项编号: ")
+        autostart_options = ["Windows 计划任务", "systemd 服务 (Linux)", "稍后自行设置"]
+        autostart_menu = SelectionMenu(autostart_options, title="请选择自启动形式", subtitle="")
+        autostart_menu.show()
+        autostart_choice = str(autostart_menu.selected_option + 1)
         
         autostart_map = {
             '1': 'task scheduler',
@@ -90,14 +120,23 @@ def setup_config():
         setup_autostart(autostart_type, os.path.abspath('curfew.py'))
 
 
-def display_main_menu():
-    print("\n===== Curfew 系统 =====")
-    print("1. 重新初始化配置")
-    print("2. 编辑禁用时段")
-    print("3. 启动 Curfew 主程序")
-    print("4. 退出")
-    choice = input("请输入选项编号: ")
-    return choice
+def reinitialize_config():
+    print("开始重新配置")
+    setup_config()
+
+def edit_schedule():
+    print("启动时段编辑器...")
+    try:
+        subprocess.run([sys.executable, 'schedule_editor.py'])
+    except Exception as e:
+        print(f"运行时段编辑器失败: {e}")
+
+def start_curfew():
+    print("启动 Curfew 主程序...")
+    try:
+        subprocess.run([sys.executable, 'curfew.py'])
+    except Exception as e:
+        print(f"运行 Curfew 主程序失败: {e}")
 
 def main():
     try:
@@ -109,29 +148,18 @@ def main():
         print("首次启动，开始配置")
         setup_config()
     
-    while config:
-        choice = display_main_menu()
-        
-        if choice == '1':
-            print("开始重新配置")
-            setup_config()
-        elif choice == '2':
-            print("启动时段编辑器...")
-            try:
-                subprocess.run([sys.executable, 'schedule_editor.py'])
-            except Exception as e:
-                print(f"运行时段编辑器失败: {e}")
-        elif choice == '3':
-            print("启动 Curfew 主程序...")
-            try:
-                subprocess.run([sys.executable, 'curfew.py'])
-            except Exception as e:
-                print(f"运行 Curfew 主程序失败: {e}")
-        elif choice == '4':
-            print("退出程序")
-            break
-        else:
-            print("无效的选项，请重新输入")
+    # 创建菜单项字典
+    menu_items = {
+        "重新初始化配置": reinitialize_config,
+        "编辑禁用时段": edit_schedule,
+        "启动 Curfew 主程序": start_curfew
+    }
+    
+    # 创建主菜单
+    menu = ConsoleMenu("Curfew 系统", menu_items)
+    
+    # 执行菜单
+    menu.execute()
 
 if __name__ == "__main__":
     main()

@@ -41,3 +41,4 @@ urllib3==2.6.3
 userpath==1.9.2
 wheel==0.46.3
 zipp==3.23.0
+consolemenu==1.0.1
