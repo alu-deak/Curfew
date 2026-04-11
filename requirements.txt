@@ -25,3 +25,4 @@ userpath
 wheel
 zipp
 consolemenu
+python-daemon
