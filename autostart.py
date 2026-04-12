@@ -52,7 +52,8 @@ Type=simple
 User=root
 Environment=CURFEW_CONFIG={os.path.join(os.path.dirname(script_path), 'config.json')}
 ExecStart=/bin/bash -c 'source {activate_script} && python3 {script_path}'
-Restart=no
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
