@@ -15,7 +15,6 @@ def display_schedule():
     
     for i, period in enumerate(restricted_hours_list, 1):
         print(f"  {i}. {period['start_hour']}:{period['start_minute']:02d} - {period['end_hour']}:{period['end_minute']:02d}")
-    input("\n按回车键返回菜单...")
 
 def add_period():
     print("\n添加新时间段:")
@@ -35,12 +34,10 @@ def add_period():
     global modified
     modified = True
     print("时间段添加成功")
-    input("\n按回车键返回菜单...")
 
 def edit_period():
     if not restricted_hours_list:
         print("暂无时间段可编辑")
-        input("\n按回车键返回菜单...")
         return
     
     display_schedule()
@@ -68,12 +65,10 @@ def edit_period():
         print("时间段编辑成功")
     else:
         print("无效的时间段编号")
-    input("\n按回车键返回菜单...")
 
 def delete_period():
     if not restricted_hours_list:
         print("暂无时间段可删除")
-        input("\n按回车键返回菜单...")
         return
     
     display_schedule()
@@ -85,16 +80,16 @@ def delete_period():
         print("时间段删除成功")
     else:
         print("无效的时间段编号")
-    input("\n按回车键返回菜单...")
 
 def save():
+    global modified
     if modified:
         config['restricted_hours'] = restricted_hours_list
         save_config(config)
         print("配置已保存")
+        modified = False
     else:
         print("无修改需要保存")
-    input("\n按回车键返回菜单...")
 
 def confirm_exit():
     global modified

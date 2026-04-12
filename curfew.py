@@ -11,10 +11,7 @@ def signal_handler(signum, frame):
     print(f"收到信号 {signum}，准备退出...")
     sys.exit(0)
 
-def main():
-    # 加载配置
-    config = load_config()
-    
+def main(config):
     # 获取配置
     restricted_hours_list = config.get('restricted_hours', [])
     # 兼容旧版配置
@@ -45,7 +42,7 @@ def main():
     # 循环结束后执行关机
     print("准备执行关机命令")
     # 根据 debug 配置决定是否在调试模式下运行
-    shutdown(config['shutdown_command'])
+    shutdown(config['shutdown_command'], debug=debug)
     
     print("Curfew 退出")
 
@@ -54,8 +51,8 @@ if __name__ == "__main__":
     # 检查是否在调试模式
     if config.get('debug', False):
         # 直接运行，不使用守护进程
-        main()
+        main(config)
     else:
         from daemon import DaemonContext
         with DaemonContext():
-            main()
+            main(config)
