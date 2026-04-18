@@ -97,14 +97,10 @@ def setup_config():
         else:
             shutdown_command = custom_command
     
-    print("\n请设置检测间隔 (分钟):")
-    check_interval = int(input("检测间隔 (1-20): "))
-    
     config = {
         'autostart_type': autostart_type,
         'shutdown_command': shutdown_command,
         'restricted_hours': [],
-        'check_interval': check_interval,
         'debug': False
     }
     
