@@ -3,7 +3,7 @@ import time
 import signal
 import sys
 from config import load_config
-from time_check import is_in_restricted_hours, is_in_any_restricted_hours
+from time_check import is_in_any_restricted_hours
 from shutdown import shutdown
 
 def signal_handler(signum, frame):

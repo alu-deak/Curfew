@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 import subprocess
-from config import load_config
 
 def shutdown(shutdown_command, test_mode=False, debug=False):
     print(f"执行关机命令: {shutdown_command}")
