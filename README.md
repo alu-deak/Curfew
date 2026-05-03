@@ -6,6 +6,9 @@
 
 Curfew 是一个智能的开机启动工具，帮助您管理电脑的使用时间，在设定的禁用时段自动执行关机操作。
 
+> [!IMPORTANT]
+> 作者使用Linux系统，因此对Windows系统的支持可能有限，且仅在Linux环境下测试。
+
 ## 🎯 核心功能
 
 - **智能时间管理**：设置禁用时段，自动检测并执行关机操作
@@ -58,6 +61,8 @@ pip install python-daemon
 ```bash
 sudo su
 source .venv/bin/activate  # 先切到su用户，再激活环境，避免依赖无法加载
+python3 app.py #启动GUI配置
+# 或启动TUI配置
 python3 main.py
 ```
 
@@ -67,6 +72,8 @@ python3 main.py
 
 ```
 .venv\Scripts\activate.bat
+python app.py #启动GUI配置
+# 或启动TUI配置
 python main.py
 ```
 
@@ -98,34 +105,9 @@ python curfew.py
 
 ## ⚙️ 配置说明
 
-配置文件 config.json 会在首次运行 main.py 后自动生成，包含以下设置：
-
-```json
-{
-  "autostart_type": "systemd",  // 自启动类型
-  "shutdown_command": ["shutdown", "now"],  // 关机命令
-  "restricted_hours": [
-    {
-      "start_hour": 13,  // 禁用时段开始小时
-      "start_minute": 30,  // 禁用时段开始分钟
-      "end_hour": 17,  // 禁用时段结束小时
-      "end_minute": 0  // 禁用时段结束分钟
-    },
-    {
-      "start_hour": 23,  // 禁用时段开始小时
-      "start_minute": 0,  // 禁用时段开始分钟
-      "end_hour": 6,  // 禁用时段结束小时
-      "end_minute": 0  // 禁用时段结束分钟
-    }
-  ],
-  "check_interval": 5,  // 检测间隔（分钟）
-  "debug": false  // 调试模式
-}
-```
-
 ### 调试模式
 
-如需测试功能而不实际执行关机操作，可将 debug 设置为 true 。
+如需测试功能而不实际执行关机操作，可将 config.json 中的 "debug" 设置为 true 。
 
 ## 💡 小贴士
 
@@ -133,3 +115,4 @@ python curfew.py
 - **权限要求**：设置 systemd 服务需要 root 权限
 - **重新配置**：如需修改配置，删除 config.json 文件后再次运行 main.py
 - **测试建议**：首次使用时，建议将 debug 设置为 true 进行测试
+

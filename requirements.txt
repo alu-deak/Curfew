@@ -1,1 +1,4 @@
 flask
+chinese-calendar
+python-daemon
+consolemenu
