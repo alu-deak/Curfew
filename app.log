@@ -1,0 +1,33 @@
+nohup: 忽略输入
+NiceGUI ready to go on http://localhost:8080, http://192.168.10.16:8080, http://192.168.122.1:8080, and http://198.18.0.1:8080
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+http://localhost:8080/@vite/client not found
+WARNING:  WatchFiles detected changes in 'app.py'. Reloading...
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=21, pipe_handle=27)
+                                                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/usr/lib/python3.13/multiprocessing/spawn.py", line 131, in _main
+    prepare(preparation_data)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/multiprocessing/spawn.py", line 246, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/multiprocessing/spawn.py", line 297, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+                                  run_name="__mp_main__")
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/chen-shuhan/Curfew/app.py", line 2, in <module>
+    from flask import Flask, render_template, jsonify, request
+ModuleNotFoundError: No module named 'flask'
