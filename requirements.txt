@@ -24,5 +24,6 @@ urllib3
 userpath
 wheel
 zipp
+chinese-calendar
 consolemenu
 python-daemon

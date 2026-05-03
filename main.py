@@ -100,7 +100,11 @@ def setup_config():
     config = {
         'autostart_type': autostart_type,
         'shutdown_command': shutdown_command,
-        'restricted_hours': [],
+        'restricted_hours': {
+            'workday': [],
+            'weekend': [],
+            'holiday': []
+        },
         'debug': False
     }
     
