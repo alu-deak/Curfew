@@ -51,6 +51,14 @@
                         <button class="btn btn-primary" onclick="addPeriod('workday')">添加</button>
                     </div>
                 </div>
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem;">⏱️ 连续使用时间限制</h3>
+                    <div class="form-group">
+                        <label>最大连续使用时长（分钟）</label>
+                        <input type="number" id="continuous-limit-workday" min="0" placeholder="0 表示不启用" style="width: 120px;">
+                        <small style="color: var(--text-secondary);">设置为 0 则不启用</small>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -78,6 +86,14 @@
                             </div>
                         </div>
                         <button class="btn btn-primary" onclick="addPeriod('weekend')">添加</button>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem;">⏱️ 连续使用时间限制</h3>
+                    <div class="form-group">
+                        <label>最大连续使用时长（分钟）</label>
+                        <input type="number" id="continuous-limit-weekend" min="0" placeholder="0 表示不启用" style="width: 120px;">
+                        <small style="color: var(--text-secondary);">设置为 0 则不启用</small>
                     </div>
                 </div>
             </div>
@@ -109,6 +125,14 @@
                         <button class="btn btn-primary" onclick="addPeriod('holiday')">添加</button>
                     </div>
                 </div>
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem;">⏱️ 连续使用时间限制</h3>
+                    <div class="form-group">
+                        <label>最大连续使用时长（分钟）</label>
+                        <input type="number" id="continuous-limit-holiday" min="0" placeholder="0 表示不启用" style="width: 120px;">
+                        <small style="color: var(--text-secondary);">设置为 0 则不启用</small>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -128,6 +152,12 @@
             workday: [],
             weekend: [],
             holiday: []
+        };
+
+        let continuousLimits = {
+            workday: 0,
+            weekend: 0,
+            holiday: 0
         };
 
         function switchTab(tabName) {
@@ -225,12 +255,23 @@
                         weekend: [],
                         holiday: []
                     },
+                    continuous_usage_limits: {
+                        workday: 0,
+                        weekend: 0,
+                        holiday: 0
+                    },
                     debug: false
                 };
             }
 
             config.restricted_hours = periods;
+            config.continuous_usage_limits = {
+                workday: parseInt(document.getElementById('continuous-limit-workday').value) || 0,
+                weekend: parseInt(document.getElementById('continuous-limit-weekend').value) || 0,
+                holiday: parseInt(document.getElementById('continuous-limit-holiday').value) || 0
+            };
             await saveConfig(config);
+            showNotification('配置已保存', 'success');
         }
 
         async function loadPeriods() {
@@ -242,6 +283,16 @@
                 weekend: config.restricted_hours?.weekend || [],
                 holiday: config.restricted_hours?.holiday || []
             };
+
+            continuousLimits = {
+                workday: config.continuous_usage_limits?.workday || 0,
+                weekend: config.continuous_usage_limits?.weekend || 0,
+                holiday: config.continuous_usage_limits?.holiday || 0
+            };
+
+            document.getElementById('continuous-limit-workday').value = continuousLimits.workday;
+            document.getElementById('continuous-limit-weekend').value = continuousLimits.weekend;
+            document.getElementById('continuous-limit-holiday').value = continuousLimits.holiday;
 
             renderPeriods('workday');
             renderPeriods('weekend');

@@ -105,6 +105,11 @@ def setup_config():
             'weekend': [],
             'holiday': []
         },
+        'continuous_usage_limits': {
+            'workday': 0,
+            'weekend': 0,
+            'holiday': 0
+        },
         'debug': False
     }
     

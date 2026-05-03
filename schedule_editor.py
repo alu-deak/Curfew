@@ -6,6 +6,7 @@ config = None
 restricted_hours_dict = {}
 current_date_type = 'workday'
 modified = False
+continuous_usage_limits = {}
 
 date_type_names = {
     'workday': '工作日',
@@ -133,10 +134,29 @@ def delete_period():
     else:
         print("无效的时间段编号")
 
+def set_continuous_usage_limit():
+    global continuous_usage_limits, modified
+    print("\n设置连续使用时间限制:")
+    
+    for date_type in ['workday', 'weekend', 'holiday']:
+        current_limit = continuous_usage_limits.get(date_type, 0)
+        print(f"\n{date_type_names[date_type]}:")
+        print(f"  当前设置: {current_limit} 分钟（0 表示不启用）")
+        try:
+            limit_input = input(f"  请输入{date_type_names[date_type]}最大连续使用时长（分钟）[回车保持不变]: ")
+            if limit_input:
+                limit = int(limit_input)
+                continuous_usage_limits[date_type] = limit
+                modified = True
+                print(f"  {date_type_names[date_type]}连续使用时间限制已设置为: {limit} 分钟")
+        except ValueError:
+            print("  无效输入，跳过此项")
+
 def save():
     global modified
     if modified:
         config['restricted_hours'] = restricted_hours_dict
+        config['continuous_usage_limits'] = continuous_usage_limits
         save_config(config)
         print("配置已保存")
         modified = False
@@ -153,7 +173,7 @@ def confirm_exit():
     exit()
 
 def main():
-    global config, restricted_hours_dict, current_date_type
+    global config, restricted_hours_dict, current_date_type, continuous_usage_limits
     try:
         config = load_config()
     except FileNotFoundError:
@@ -161,10 +181,13 @@ def main():
         return
     
     restricted_hours_dict = config.get('restricted_hours', {}).copy()
+    continuous_usage_limits = config.get('continuous_usage_limits', {}).copy()
     
     for key in ['workday', 'weekend', 'holiday']:
         if key not in restricted_hours_dict:
             restricted_hours_dict[key] = []
+        if key not in continuous_usage_limits:
+            continuous_usage_limits[key] = 0
     
     print(f"当前编辑的是: {date_type_names[current_date_type]}")
     
@@ -175,6 +198,7 @@ def main():
         "添加新时间段": add_period,
         "编辑现有时间段": edit_period,
         "删除时间段": delete_period,
+        "设置连续使用时间限制": set_continuous_usage_limit,
         "保存": save
     }
     

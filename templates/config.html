@@ -134,6 +134,11 @@
                     weekend: [],
                     holiday: []
                 },
+                continuous_usage_limits: (await loadConfig())?.continuous_usage_limits || {
+                    workday: 0,
+                    weekend: 0,
+                    holiday: 0
+                },
                 debug: false
             };
 

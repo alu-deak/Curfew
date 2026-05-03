@@ -14,7 +14,13 @@ def load_config():
         for key in ['workday', 'weekend', 'holiday']:
             if key not in restricted_hours:
                 restricted_hours[key] = []
-        
+
+        if 'continuous_usage_limits' not in config:
+            config['continuous_usage_limits'] = {}
+        for key in ['workday', 'weekend', 'holiday']:
+            if key not in config['continuous_usage_limits']:
+                config['continuous_usage_limits'][key] = 0
+
         return config
     
     raise FileNotFoundError("配置文件不存在，请先运行 main.py 进行配置")
