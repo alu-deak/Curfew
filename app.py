@@ -7,7 +7,8 @@ import webbrowser
 
 app = Flask(__name__)
 
-CONFIG_FILE = os.environ.get('CURFEW_CONFIG', os.path.join(os.getcwd(), 'config.json'))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.environ.get('CURFEW_CONFIG', os.path.join(SCRIPT_DIR, 'config.json'))
 
 def load_config():
     if os.path.exists(CONFIG_FILE):
@@ -47,6 +48,17 @@ def api_save_config():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+def load_status():
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    STATUS_FILE = os.path.join(SCRIPT_DIR, 'status.json')
+    if os.path.exists(STATUS_FILE):
+        try:
+            with open(STATUS_FILE, 'r') as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {'consecutive_seconds': 0}
+
 @app.route('/api/status', methods=['GET'])
 def api_get_status():
     from date_type import get_date_type
@@ -59,11 +71,13 @@ def api_get_status():
     date_type = get_date_type()
     is_in_curfew = is_in_restricted_hours_for_today(config.get('restricted_hours', {}))
     now = datetime.now().strftime('%H:%M:%S')
+    status = load_status()
 
     return jsonify({
         'date_type': date_type,
         'is_in_curfew': is_in_curfew,
-        'current_time': now
+        'current_time': now,
+        'consecutive_seconds': status.get('consecutive_seconds', 0)
     })
 
 if __name__ == '__main__':

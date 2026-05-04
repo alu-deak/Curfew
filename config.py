@@ -2,7 +2,8 @@
 import os
 import json
 
-CONFIG_FILE = os.environ.get('CURFEW_CONFIG', os.path.join(os.getcwd(), 'config.json'))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.environ.get('CURFEW_CONFIG', os.path.join(SCRIPT_DIR, 'config.json'))
 
 def load_config():
     if os.path.exists(CONFIG_FILE):

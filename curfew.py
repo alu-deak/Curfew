@@ -2,10 +2,22 @@
 import time
 import signal
 import sys
+import json
+import os
 from config import load_config
 from time_check import is_in_restricted_hours_for_today
 from shutdown import shutdown
 from date_type import get_date_type
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATUS_FILE = os.path.join(SCRIPT_DIR, 'status.json')
+
+def save_status(consecutive_seconds):
+    try:
+        with open(STATUS_FILE, 'w') as f:
+            json.dump({'consecutive_seconds': consecutive_seconds}, f)
+    except Exception as e:
+        pass
 
 def signal_handler(signum, frame):
     """处理信号，优雅退出"""
@@ -48,10 +60,12 @@ def main(config):
     current_date_type = get_date_type()
     print(f"\n当前日期类型: {date_type_names[current_date_type]}")
     
+    save_status(consecutive_seconds)
     while True:
         if is_in_restricted_hours_for_today(restricted_hours_dict):
             print("检测到当前时间在禁用时段内")
             consecutive_seconds = 0
+            save_status(consecutive_seconds)
             break
         else:
             current_date_type = get_date_type()
@@ -59,10 +73,12 @@ def main(config):
             print(f"当前时间不在禁用时段内（{date_type_names[current_date_type]}），1秒后再次检测")
             time.sleep(1)
             consecutive_seconds += 1
+            save_status(consecutive_seconds)
 
             if current_limit > 0 and consecutive_seconds >= current_limit * 60:
                 print(f"连续使用时间超过限制（{current_limit}分钟）")
                 consecutive_seconds = 0
+                save_status(consecutive_seconds)
                 break
     
     print("准备执行关机命令")

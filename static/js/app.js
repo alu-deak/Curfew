@@ -37,6 +37,13 @@ function formatTime(hour, minute) {
     return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 }
 
+function formatSecondsToHMS(seconds) {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
 function getDateTypeName(dateType) {
     const names = {
         'workday': '工作日',
@@ -86,9 +93,12 @@ let statusTimer = null;
 async function updateStatus() {
     try {
         const status = await apiGet('/api/status');
+        const config = await apiGet('/api/config');
         const statusEl = document.getElementById('status-indicator');
         const timeEl = document.getElementById('current-time');
         const dateTypeEl = document.getElementById('date-type');
+        const consecutiveTimeEl = document.getElementById('consecutive-time');
+        const consecutiveLimitEl = document.getElementById('consecutive-limit');
 
         if (statusEl) {
             statusEl.className = `status-indicator ${status.is_in_curfew ? 'curfew' : 'normal'}`;
@@ -103,6 +113,15 @@ async function updateStatus() {
 
         if (dateTypeEl) {
             dateTypeEl.textContent = getDateTypeName(status.date_type);
+        }
+
+        if (consecutiveTimeEl) {
+            consecutiveTimeEl.textContent = formatSecondsToHMS(status.consecutive_seconds || 0);
+        }
+
+        if (consecutiveLimitEl) {
+            const limit = config?.continuous_usage_limits?.[status.date_type] || 0;
+            consecutiveLimitEl.textContent = limit > 0 ? `${limit} 分钟` : '无限制';
         }
 
         await loadScheduleForToday();
