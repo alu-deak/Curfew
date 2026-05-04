@@ -4,3 +4,4 @@ __pycache__/
 .trae/
 .vscode/settings.json
 app.log
+status.json
