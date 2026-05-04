@@ -3,3 +3,4 @@ curfew.log
 __pycache__/
 .trae/
 .vscode/settings.json
+app.log
