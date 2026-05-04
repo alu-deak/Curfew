@@ -3,6 +3,7 @@ from flask import Flask, render_template, jsonify, request
 import json
 import os
 from datetime import datetime
+import webbrowser
 
 app = Flask(__name__)
 
@@ -66,4 +67,5 @@ def api_get_status():
     })
 
 if __name__ == '__main__':
+    webbrowser.open('http://localhost:8080')
     app.run(debug=True, port=8080)
