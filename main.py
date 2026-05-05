@@ -91,8 +91,8 @@ def setup_config():
     
     print("\n提示：")
     print("- 您尚未配置禁用时段")
-    print("- 请运行 schedule_editor.py 来添加和管理禁用时段")
-    print("  命令：python3 schedule_editor.py")
+    print("- 请运行 app.py 来添加和管理禁用时段")
+    print("  命令：python3 app.py")
     
     if autostart_type != 'manual':
         setup_autostart(autostart_type, os.path.abspath('curfew.py'))
