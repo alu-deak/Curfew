@@ -6,22 +6,11 @@
 
 Curfew 是一个智能的开机启动工具，帮助您管理电脑的使用时间，在设定的禁用时段自动执行关机操作。
 
-> \[!IMPORTANT]
+> [!IMPORTANT]
 > 作者使用Linux系统，因此对Windows系统的支持可能有限，且仅在Linux环境下测试。
 >
 > 这是一个不负责任的作者，因为已知的用户只有作者自己。请自行解决旧版兼容性问题。\
 > 升级前请务必做好配置备份，如有问题请自行调试。
-
-## 🎯 核心功能
-
-- **智能时间管理**：设置禁用时段，自动检测并执行关机操作
-- **跨平台支持**：同时支持 Windows 和 Linux 系统
-- **灵活的自启动选项**：
-  - Windows 系统：自动设置计划任务
-  - Linux 系统：自动配置 systemd 服务
-  - 自定义模式：根据需要自行设置
-- **可调节的检测间隔**：根据您的需求设置检查时间间隔
-- **安全的调试模式**：在测试时避免实际执行关机操作
 
 ## 📖 使用场景
 
@@ -45,14 +34,7 @@ python3 -m venv .venv
 
 ```bash
 source .venv/bin/activate
-pip install python-daemon
-```
-
-#### Windows
-
-```
-.venv\Scripts\activate.bat
-pip install python-daemon
+pip install -r requirements.txt
 ```
 
 ### 2. 首次配置
@@ -64,20 +46,8 @@ pip install python-daemon
 ```bash
 sudo su
 source .venv/bin/activate  # 先切到su用户，再激活环境，避免依赖无法加载
+sudo python3 main.py # 初始化，创建配置文件，创建systemd服务文件
 python3 app.py #启动GUI配置
-# 或启动TUI配置
-python3 main.py
-```
-
-#### Windows
-
-以管理员身份运行命令提示符，然后执行：
-
-```
-.venv\Scripts\activate.bat
-python app.py #启动GUI配置
-# 或启动TUI配置
-python main.py
 ```
 
 配置过程中，您需要：
@@ -97,13 +67,6 @@ source .venv/bin/activate
 python3 curfew.py
 ```
 
-#### Windows
-
-```
-.venv\Scripts\activate.bat
-python curfew.py
-```
-
 程序会按照设置的检测间隔，持续检查当前时间是否在禁用时段内。
 
 ## ⚙️ 配置说明
@@ -116,6 +79,4 @@ python curfew.py
 
 - **跨天设置**：支持跨天的禁用时段，如晚上 11 点到早上 7 点
 - **权限要求**：设置 systemd 服务需要 root 权限
-- **重新配置**：如需修改配置，删除 config.json 文件后再次运行 main.py
 - **测试建议**：首次使用时，建议将 debug 设置为 true 进行测试
-

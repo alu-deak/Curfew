@@ -1,32 +1,14 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template, jsonify, request
-import json
-import os
 from datetime import datetime
 import webbrowser
+from config import load_config, save_config, load_status
 
 app = Flask(__name__)
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE = os.environ.get('CURFEW_CONFIG', os.path.join(SCRIPT_DIR, 'config.json'))
-
-def load_config():
-    if os.path.exists(CONFIG_FILE):
-        with open(CONFIG_FILE, 'r') as f:
-            return json.load(f)
-    return None
-
-def save_config(config):
-    with open(CONFIG_FILE, 'w') as f:
-        json.dump(config, f, indent=4)
 
 @app.route('/')
 def dashboard():
     return render_template('dashboard.html')
-
-@app.route('/config')
-def config_page():
-    return render_template('config.html')
 
 @app.route('/schedule')
 def schedule_page():
@@ -47,17 +29,6 @@ def api_save_config():
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-def load_status():
-    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    STATUS_FILE = os.path.join(SCRIPT_DIR, 'status.json')
-    if os.path.exists(STATUS_FILE):
-        try:
-            with open(STATUS_FILE, 'r') as f:
-                return json.load(f)
-        except Exception:
-            pass
-    return {'consecutive_seconds': 0}
 
 @app.route('/api/status', methods=['GET'])
 def api_get_status():

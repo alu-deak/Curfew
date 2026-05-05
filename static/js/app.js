@@ -159,7 +159,7 @@ async function loadConfig() {
     try {
         return await apiGet('/api/config');
     } catch (error) {
-        showNotification('加载配置失败', 'error');
+        showNotification('加载配置失败，请先运行main.py初始化系统', 'error');
         return null;
     }
 }

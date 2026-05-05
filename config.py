@@ -9,19 +9,6 @@ def load_config():
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, 'r') as f:
             config = json.load(f)
-        
-        restricted_hours = config.get('restricted_hours', {})
-        
-        for key in ['workday', 'weekend', 'holiday']:
-            if key not in restricted_hours:
-                restricted_hours[key] = []
-
-        if 'continuous_usage_limits' not in config:
-            config['continuous_usage_limits'] = {}
-        for key in ['workday', 'weekend', 'holiday']:
-            if key not in config['continuous_usage_limits']:
-                config['continuous_usage_limits'][key] = 0
-
         return config
     
     raise FileNotFoundError("配置文件不存在，请先运行 main.py 进行配置")
@@ -30,3 +17,14 @@ def save_config(config):
     os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
     with open(CONFIG_FILE, 'w') as f:
         json.dump(config, f, indent=4)
+
+def load_status():
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    STATUS_FILE = os.path.join(SCRIPT_DIR, 'status.json')
+    if os.path.exists(STATUS_FILE):
+        try:
+            with open(STATUS_FILE, 'r') as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {'consecutive_seconds': 0}
